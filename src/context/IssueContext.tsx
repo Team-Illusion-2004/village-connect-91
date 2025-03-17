@@ -180,7 +180,9 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       assignedTo: {
         id: user.id,
         name: user.name,
-        role: user.role
+        role: user.role === 'volunteer' || user.role === 'panchayat' 
+          ? user.role 
+          : 'volunteer' // Fallback to volunteer if the role is not valid
       }
     });
     

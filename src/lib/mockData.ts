@@ -235,6 +235,7 @@ export const getMockMeetings = (villageId: string): Meeting[] => [
       id: villageId,
       name: villageId === "v1" ? "Rampura" : "Chittorgarh",
     },
+    status: "upcoming"
   },
   {
     id: "meet2",
@@ -246,6 +247,7 @@ export const getMockMeetings = (villageId: string): Meeting[] => [
       id: villageId,
       name: villageId === "v1" ? "Rampura" : "Chittorgarh",
     },
+    status: "upcoming"
   },
   {
     id: "meet3",
@@ -258,6 +260,7 @@ export const getMockMeetings = (villageId: string): Meeting[] => [
       name: villageId === "v1" ? "Rampura" : "Chittorgarh",
     },
     summary: "Discussed the new government subsidy for organic farming. Decided to form a committee for collective purchase of seeds for the upcoming season. Next steps include organizing a training session on organic pesticides.",
+    status: "completed"
   },
 ];
 

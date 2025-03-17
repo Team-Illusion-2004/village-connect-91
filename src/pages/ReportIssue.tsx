@@ -58,6 +58,10 @@ const ReportIssue = () => {
         coordinates: coordinates || undefined,
         status: 'reported',
         priority,
+        reportedBy: {
+          id: user.id,
+          name: user.name
+        },
         village: user.village,
         attachments: attachments.length > 0 ? [...attachments] : undefined,
       });
