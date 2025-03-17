@@ -6,7 +6,7 @@ import { useMemo } from "react";
 interface UserAvatarProps {
   name: string;
   avatarUrl?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   className?: string;
 }
 
@@ -20,6 +20,7 @@ export const UserAvatar = ({
     switch (size) {
       case "sm": return "h-8 w-8 text-xs";
       case "lg": return "h-14 w-14 text-xl";
+      case "xl": return "h-20 w-20 text-2xl";
       default: return "h-10 w-10 text-sm"; // md
     }
   }, [size]);

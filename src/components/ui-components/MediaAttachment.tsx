@@ -8,12 +8,14 @@ interface MediaAttachmentProps {
   attachment: FileAttachment;
   className?: string;
   onClick?: () => void;
+  alt?: string;
 }
 
 export const MediaAttachment = ({ 
   attachment, 
   className = "",
-  onClick 
+  onClick,
+  alt = "Media attachment"
 }: MediaAttachmentProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -29,7 +31,7 @@ export const MediaAttachment = ({
         )}
         <img
           src={attachment.url}
-          alt="Attachment"
+          alt={alt}
           className={`w-full h-full object-cover transition-opacity ${isLoading ? "opacity-0" : "opacity-100"}`}
           onLoad={handleLoad}
           onClick={onClick}
@@ -52,7 +54,7 @@ export const MediaAttachment = ({
         </div>
         <img
           src={attachment.thumbnailUrl || attachment.url}
-          alt="Video thumbnail"
+          alt={alt}
           className={`w-full h-full object-cover transition-opacity ${isLoading ? "opacity-0" : "opacity-100"}`}
           onLoad={handleLoad}
         />

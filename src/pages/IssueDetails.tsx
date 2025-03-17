@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from 'react-router-dom';
 import { useIssue } from '@/context/IssueContext';
 import { useAuth } from '@/context/AuthContext';
@@ -217,7 +216,6 @@ const IssueDetails = () => {
           <div className="flex gap-2 items-center">
             <UserAvatar 
               name={issue.reportedBy.name} 
-              avatar={issue.reportedBy.avatar} 
               size="sm" 
             />
             <span>Reported by <strong>{issue.reportedBy.name}</strong></span>
@@ -238,7 +236,6 @@ const IssueDetails = () => {
               <h3 className="font-medium text-sm text-gray-500">Assigned to:</h3>
               <UserAvatar 
                 name={issue.assignedTo.name} 
-                avatar={issue.assignedTo.avatar} 
                 size="sm" 
               />
               <span className="text-sm">{issue.assignedTo.name}</span>
@@ -252,7 +249,7 @@ const IssueDetails = () => {
                 {issue.attachments.map((attachment) => (
                   <MediaAttachment 
                     key={attachment.id} 
-                    media={attachment} 
+                    attachment={attachment} 
                     alt={`Attachment for ${issue.title}`} 
                   />
                 ))}
@@ -265,7 +262,7 @@ const IssueDetails = () => {
               <h3 className="font-medium text-sm text-gray-500 mb-2">Resolution Proof</h3>
               <div className="grid grid-cols-2 gap-2">
                 <MediaAttachment 
-                  media={issue.resolutionProof} 
+                  attachment={issue.resolutionProof} 
                   alt={`Resolution proof for ${issue.title}`} 
                 />
               </div>
@@ -374,7 +371,7 @@ const IssueDetails = () => {
                   <div className="flex items-start gap-3">
                     <UserAvatar 
                       name={comment.sender.name} 
-                      avatar={comment.sender.avatar} 
+                      avatarUrl={comment.sender.avatar} 
                       size="sm" 
                     />
                     <div className="flex-1">
@@ -389,7 +386,7 @@ const IssueDetails = () => {
                           {comment.attachments.map((attachment) => (
                             <MediaAttachment 
                               key={attachment.id} 
-                              media={attachment} 
+                              attachment={attachment} 
                               alt={`Comment attachment`} 
                             />
                           ))}

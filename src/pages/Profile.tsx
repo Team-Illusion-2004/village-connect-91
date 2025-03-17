@@ -76,7 +76,7 @@ const Profile = () => {
         <Card className="md:col-span-1">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-              <UserAvatar name={user.name} avatar={user.avatar} size="xl" />
+              <UserAvatar name={user.name} avatarUrl={user.avatar} size="lg" />
             </div>
             <CardTitle>{user.name}</CardTitle>
             <CardDescription>

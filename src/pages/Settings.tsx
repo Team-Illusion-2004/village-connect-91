@@ -18,7 +18,7 @@ const Settings = () => {
   
   const [name, setName] = useState(user?.name || '');
   const [phone, setPhone] = useState(user?.phone || '');
-  const [bio, setBio] = useState(user?.bio || '');
+  const [bio, setBio] = useState(''); // User bio is not in the type yet, we'll keep it as local state
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [pushNotifications, setPushNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
@@ -72,7 +72,7 @@ const Settings = () => {
           <form onSubmit={handleSaveProfile}>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-4">
-                <UserAvatar name={user.name} avatar={user.avatar} size="lg" />
+                <UserAvatar name={user.name} avatarUrl={user.avatar} size="lg" />
                 <Button variant="outline" size="sm">
                   Change Avatar
                 </Button>
