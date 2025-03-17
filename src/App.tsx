@@ -22,41 +22,41 @@ import { KarmaProvider } from "./context/KarmaContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import { IssueProvider } from "./context/IssueContext";
 
+// Create a new QueryClient instance
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <NotificationProvider>
-            <KarmaProvider>
-              <IssueProvider>
-                <Routes>
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<Signup />} />
-                  
-                  {/* Protected routes */}
-                  <Route element={<AppLayout />}>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/chat" element={<VillageChat />} />
-                    <Route path="/report" element={<ReportIssue />} />
-                    <Route path="/issues/:issueId" element={<IssueDetails />} />
-                    <Route path="/meetings" element={<Meetings />} />
-                    <Route path="/meetings/:meetingId" element={<MeetingDetails />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                  </Route>
-                  
-                  {/* Catch-all */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </IssueProvider>
-            </KarmaProvider>
-          </NotificationProvider>
+          <KarmaProvider>
+            <IssueProvider>
+              {/* Removed NotificationProvider as requested */}
+              <Toaster />
+              <Sonner />
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                
+                {/* Protected routes */}
+                <Route element={<AppLayout />}>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/chat" element={<VillageChat />} />
+                  <Route path="/report" element={<ReportIssue />} />
+                  <Route path="/issues/:issueId" element={<IssueDetails />} />
+                  <Route path="/meetings" element={<Meetings />} />
+                  <Route path="/meetings/:meetingId" element={<MeetingDetails />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                </Route>
+                
+                {/* Catch-all */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </IssueProvider>
+          </KarmaProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

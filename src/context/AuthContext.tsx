@@ -37,12 +37,23 @@ const MOCK_VILLAGES: Village[] = [
   { id: "v5", name: "Udaipur" },
 ];
 
+// Create a default user for demo purposes
+const DEMO_USER: User = {
+  id: "user_demo",
+  name: "Demo User",
+  phone: "9876543210",
+  village: MOCK_VILLAGES[0],
+  role: "resident",
+  avatar: undefined
+};
+
 // Context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // Initialize with the demo user for easy testing
+  const [user, setUser] = useState<User | null>(DEMO_USER);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [villages] = useState<Village[]>(MOCK_VILLAGES);
 
   useEffect(() => {
@@ -54,6 +65,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } catch (error) {
         console.error("Failed to parse saved user:", error);
         localStorage.removeItem("village_connect_user");
+        // Fall back to demo user
+        setUser(DEMO_USER);
       }
     }
     setIsLoading(false);
@@ -72,7 +85,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 500));
       toast.success("OTP sent to your phone");
     } catch (error) {
       toast.error("Failed to send OTP. Please try again.");
@@ -85,24 +98,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (phone: string, otp: string, villageId: string): Promise<void> => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Simulate API call - shortened for demo
+      await new Promise(resolve => setTimeout(resolve, 500));
       
-      // In a real app, we would verify the OTP with a backend service
-      // For demo purposes, we'll just check if OTP is "1234"
-      if (otp !== "1234") {
-        throw new Error("Invalid OTP");
-      }
-
-      const village = villages.find(v => v.id === villageId);
-      if (!village) {
-        throw new Error("Village not found");
-      }
+      // Always succeed for demo
+      const village = villages.find(v => v.id === villageId) || villages[0];
 
       // Create mock user
       const newUser: User = {
         id: `user_${Date.now()}`,
-        name: "Demo User", // In a real app, we would get this from the backend
+        name: "Demo User",
         phone,
         village,
         role: "resident",
@@ -111,11 +116,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(newUser);
       toast.success("Login successful");
     } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("Login failed. Please try again.");
-      }
+      toast.error("Login failed. Please try again.");
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -130,13 +131,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   ): Promise<void> => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Simulate API call - shortened for demo
+      await new Promise(resolve => setTimeout(resolve, 500));
       
-      const village = villages.find(v => v.id === villageId);
-      if (!village) {
-        throw new Error("Village not found");
-      }
+      const village = villages.find(v => v.id === villageId) || villages[0];
 
       // Create mock user
       const newUser: User = {
@@ -150,11 +148,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(newUser);
       toast.success("Signup successful");
     } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("Signup failed. Please try again.");
-      }
+      toast.error("Signup failed. Please try again.");
       console.error(error);
     } finally {
       setIsLoading(false);
@@ -162,8 +156,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = () => {
-    setUser(null);
-    toast.success("Logged out successfully");
+    // For demo, don't actually log out
+    toast.success("This is a demo - you would be logged out in a real app");
+    // If we wanted to actually log out:
+    // setUser(null);
   };
 
   return (

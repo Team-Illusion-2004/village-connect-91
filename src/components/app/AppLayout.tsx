@@ -17,9 +17,8 @@ export const AppLayout = () => {
     );
   }
 
-  // For demo purposes, let's auto-authenticate users
-  // In a real application, this would check actual authentication
-  const demoAuth = true; // Set this to true to bypass authentication for the demo
+  // For demo purposes, always bypass authentication
+  const demoAuth = true;
 
   if (!isAuthenticated && !demoAuth) {
     return <Navigate to="/login" />;
