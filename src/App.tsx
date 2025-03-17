@@ -19,8 +19,7 @@ import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
 import { KarmaProvider } from "./context/KarmaContext";
-import { NotificationProvider } from "./context/NotificationContext";
-import { IssueProvider } from "./context/IssueContext";
+import { IssueProvider } from "./context/issues";
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -32,7 +31,6 @@ const App = () => (
         <AuthProvider>
           <KarmaProvider>
             <IssueProvider>
-              {/* Removed NotificationProvider as requested */}
               <Toaster />
               <Sonner />
               <Routes>

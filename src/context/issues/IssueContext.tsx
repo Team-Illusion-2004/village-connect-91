@@ -1,41 +1,18 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useAuth } from './AuthContext';
-import { Issue, IssueStatus } from '@/lib/types';
-import { useKarma } from './KarmaContext';
-import { useNotification } from './NotificationContext';
+import React, { createContext, useState, useEffect } from 'react';
+import { useAuth } from '@/context/AuthContext';
+import { Issue } from '@/lib/types';
+import { useKarma } from '@/context/KarmaContext';
 import { toast } from '@/hooks/use-toast';
+import { IssueContextType } from './types';
+import { saveIssuesToStorage, loadIssuesFromStorage } from './issueUtils';
 
-type IssueContextType = {
-  issues: Issue[];
-  fetchIssues: () => Promise<void>;
-  addIssue: (issue: Omit<Issue, 'id' | 'createdAt' | 'updatedAt' | 'comments'>) => Promise<Issue>;
-  updateIssue: (id: string, data: Partial<Issue>) => Promise<void>;
-  deleteIssue: (id: string) => Promise<void>;
-  getIssueById: (id: string) => Issue | undefined;
-  claimIssue: (id: string) => Promise<void>;
-  resolveIssue: (id: string, resolutionProof?: { url: string; type: "image" | "video" }) => Promise<void>;
-  verifyResolution: (id: string, verified: boolean) => Promise<void>;
-  addComment: (issueId: string, content: string, attachments?: { url: string; type: "image" | "video" }[]) => Promise<void>;
-  likeComment: (issueId: string, commentId: string) => Promise<void>;
-  isLoading: boolean;
-  error: string | null;
-};
-
-const IssueContext = createContext<IssueContextType | undefined>(undefined);
-
-export const useIssue = () => {
-  const context = useContext(IssueContext);
-  if (context === undefined) {
-    throw new Error('useIssue must be used within an IssueProvider');
-  }
-  return context;
-};
+// Create the context
+export const IssueContext = createContext<IssueContextType | undefined>(undefined);
 
 export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
   const { awardKarma } = useKarma();
-  const { addNotification } = useNotification();
   const [issues, setIssues] = useState<Issue[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -53,33 +30,14 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setError(null);
     
     try {
-      // In a real app, this would be an API call
-      const storedIssues = localStorage.getItem(`issues_${user.village.id}`);
-      if (storedIssues) {
-        const parsedIssues = JSON.parse(storedIssues).map((issue: any) => ({
-          ...issue,
-          createdAt: new Date(issue.createdAt),
-          updatedAt: new Date(issue.updatedAt),
-          comments: issue.comments.map((comment: any) => ({
-            ...comment,
-            timestamp: new Date(comment.timestamp)
-          }))
-        }));
-        setIssues(parsedIssues);
-      } else {
-        setIssues([]);
-      }
+      const loadedIssues = loadIssuesFromStorage(user.village.id);
+      setIssues(loadedIssues);
     } catch (err) {
       setError('Failed to fetch issues');
       console.error(err);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const saveIssuesToStorage = (updatedIssues: Issue[]) => {
-    if (!user) return;
-    localStorage.setItem(`issues_${user.village.id}`, JSON.stringify(updatedIssues));
   };
 
   const addIssue = async (issueData: Omit<Issue, 'id' | 'createdAt' | 'updatedAt' | 'comments'>): Promise<Issue> => {
@@ -103,14 +61,7 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       
       const updatedIssues = [...issues, newIssue];
       setIssues(updatedIssues);
-      saveIssuesToStorage(updatedIssues);
-      
-      addNotification({
-        title: 'New Issue Reported',
-        message: `A new issue "${newIssue.title}" has been reported in your village.`,
-        type: 'info',
-        link: `/issues/${newIssue.id}`
-      });
+      saveIssuesToStorage(user.village.id, updatedIssues);
       
       return newIssue;
     } catch (err) {
@@ -133,7 +84,7 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       );
       
       setIssues(updatedIssues);
-      saveIssuesToStorage(updatedIssues);
+      saveIssuesToStorage(user.village.id, updatedIssues);
     } catch (err) {
       setError('Failed to update issue');
       console.error(err);
@@ -151,7 +102,7 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       const filteredIssues = issues.filter(issue => issue.id !== id);
       setIssues(filteredIssues);
-      saveIssuesToStorage(filteredIssues);
+      saveIssuesToStorage(user.village.id, filteredIssues);
     } catch (err) {
       setError('Failed to delete issue');
       console.error(err);
@@ -185,13 +136,6 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           : 'volunteer' // Fallback to volunteer if the role is not valid
       }
     });
-    
-    addNotification({
-      title: 'Issue Claimed',
-      message: `${user.name} has claimed the issue "${issue.title}"`,
-      type: 'info',
-      link: `/issues/${id}`
-    });
   };
 
   const resolveIssue = async (id: string, resolutionProof?: { url: string; type: "image" | "video" }): Promise<void> => {
@@ -215,13 +159,6 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         url: resolutionProof.url,
         type: resolutionProof.type
       } : undefined
-    });
-    
-    addNotification({
-      title: 'Issue Resolved',
-      message: `${user.name} has resolved the issue "${issue.title}"`,
-      type: 'success',
-      link: `/issues/${id}`
     });
   };
 
@@ -247,24 +184,10 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       // Award karma points to the resolver
       if (issue.assignedTo) {
         awardKarma(10, `Resolved issue: ${issue.title}`);
-        
-        addNotification({
-          title: 'Issue Verified',
-          message: `Your resolution for "${issue.title}" has been verified`,
-          type: 'success',
-          link: `/issues/${id}`
-        });
       }
     } else {
       await updateIssue(id, {
         status: 'in_progress'
-      });
-      
-      addNotification({
-        title: 'Resolution Rejected',
-        message: `Your resolution for "${issue.title}" needs more work`,
-        type: 'warning',
-        link: `/issues/${id}`
       });
     }
   };
@@ -300,16 +223,6 @@ export const IssueProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     await updateIssue(issueId, {
       comments: updatedComments
     });
-    
-    // Notify the issue reporter if it's not them commenting
-    if (issue.reportedBy.id !== user.id) {
-      addNotification({
-        title: 'New Comment',
-        message: `${user.name} commented on your issue "${issue.title}"`,
-        type: 'info',
-        link: `/issues/${issueId}`
-      });
-    }
   };
 
   const likeComment = async (issueId: string, commentId: string): Promise<void> => {

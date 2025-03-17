@@ -1,6 +1,6 @@
 
 import { useParams, useNavigate } from 'react-router-dom';
-import { useIssue } from '@/context/IssueContext';
+import { useIssue } from '@/context/issues';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { IssueDetailsHeader } from '@/components/issues/IssueDetailsHeader';
