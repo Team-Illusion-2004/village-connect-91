@@ -24,9 +24,9 @@ export const AppHeader = () => {
       <div className="container h-full flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-            <span className="text-primary-foreground font-semibold">VC</span>
+            <span className="text-primary-foreground font-semibold">CC</span>
           </div>
-          <h1 className="text-xl font-semibold hidden sm:block">VillageConnect</h1>
+          <h1 className="text-xl font-semibold hidden sm:block">CivicConnect</h1>
         </Link>
 
         <div className="flex items-center gap-3">
@@ -56,13 +56,17 @@ export const AppHeader = () => {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
+              <DropdownMenuItem asChild>
+                <Link to="/profile">
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Settings</span>
+              <DropdownMenuItem asChild>
+                <Link to="/settings">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={logout}>
