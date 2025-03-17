@@ -1,6 +1,6 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getInitials, getRandomColor } from "@/lib/utils";
+import { getInitials } from "@/lib/utils";
 import { useMemo } from "react";
 
 interface UserAvatarProps {
