@@ -35,7 +35,12 @@ export const MediaAttachment = ({
     // In a real app, this would initiate a proper download
     const link = document.createElement('a');
     link.href = attachment.url;
-    link.download = attachment.filename || `download.${attachment.type === 'image' ? 'jpg' : 'mp4'}`;
+    
+    // Generate a default filename since the property doesn't exist in the type
+    const fileExtension = attachment.type === 'image' ? 'jpg' : 'mp4';
+    const defaultFilename = `download.${fileExtension}`;
+    
+    link.download = defaultFilename;
     link.click();
   };
 
