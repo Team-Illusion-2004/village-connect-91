@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/AuthContext';
-import { useIssue } from '@/context/IssueContext';
+import { useIssue } from '@/context/issues';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Award, BarChart2, CheckCircle, Clock, Flag, Users, MessageSquare, Calendar } from 'lucide-react';
 import { Issue, IssueStatus } from '@/lib/types';

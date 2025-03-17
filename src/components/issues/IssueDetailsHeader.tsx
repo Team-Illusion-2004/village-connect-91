@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Share2 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useIssue } from '@/context/IssueContext';
+import { useIssue } from '@/context/issues';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
 

@@ -4,7 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { useIssue } from '@/context/IssueContext';
+import { useIssue } from '@/context/issues';
 import { Issue } from '@/lib/types';
 import { Link } from 'react-router-dom';
 import { Settings } from 'lucide-react';
