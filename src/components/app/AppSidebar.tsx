@@ -91,7 +91,7 @@ export const AppSidebar = () => {
                 <SidebarMenuItem key={item.path}>
                   <SidebarMenuButton
                     asChild
-                    active={currentPath === item.path}
+                    isActive={currentPath === item.path}
                   >
                     <Link to={item.path} className="flex items-center gap-3">
                       <item.icon size={18} />
@@ -111,7 +111,7 @@ export const AppSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  active={currentPath === "/profile"}
+                  isActive={currentPath === "/profile"}
                 >
                   <Link to="/profile" className="flex items-center gap-3">
                     <UserCircle size={18} />
@@ -122,7 +122,7 @@ export const AppSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  active={currentPath === "/settings"}
+                  isActive={currentPath === "/settings"}
                 >
                   <Link to="/settings" className="flex items-center gap-3">
                     <Settings size={18} />
