@@ -15,10 +15,13 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import {
+  Award,
   BarChart3,
+  Bell,
   Calendar,
   Home,
   LogOut,
+  MapPin,
   MessageSquare,
   PlusCircle,
   Settings,
@@ -28,9 +31,12 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { useKarma } from "@/context/KarmaContext";
 
 export const AppSidebar = () => {
   const { user, logout } = useAuth();
+  const { karmaPoints } = useKarma();
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -58,6 +64,11 @@ export const AppSidebar = () => {
       path: "/meetings",
     },
     {
+      icon: Bell,
+      label: "Notifications",
+      path: "/notifications",
+    },
+    {
       icon: BarChart3,
       label: "Dashboard",
       path: "/dashboard",
@@ -75,9 +86,9 @@ export const AppSidebar = () => {
       <SidebarHeader className="h-16 px-4 flex items-center">
         <Link to="/" className="flex items-center gap-2">
           <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-            <span className="text-primary-foreground font-semibold">VC</span>
+            <span className="text-primary-foreground font-semibold">CC</span>
           </div>
-          <h1 className="text-xl font-semibold">VillageConnect</h1>
+          <h1 className="text-xl font-semibold">CivicConnect</h1>
         </Link>
         <SidebarTrigger className="ml-auto" />
       </SidebarHeader>
@@ -153,6 +164,13 @@ export const AppSidebar = () => {
             <div className="font-medium">{user.name}</div>
             <div className="text-xs text-muted-foreground">{user.village.name}</div>
           </div>
+          <Badge 
+            variant="outline" 
+            className="ml-auto flex items-center gap-1 bg-civic-green-50 text-civic-green-700 border-civic-green-200"
+          >
+            <Award className="h-3 w-3" />
+            <span>{karmaPoints}</span>
+          </Badge>
         </div>
       </SidebarFooter>
     </Sidebar>
