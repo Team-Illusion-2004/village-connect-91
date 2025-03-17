@@ -44,6 +44,11 @@ export const MediaAttachment = ({
     link.click();
   };
 
+  const handleExternalLink = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.open(attachment.url, '_blank', 'noopener,noreferrer');
+  };
+
   const renderContent = () => {
     if (attachment.type === "image") {
       return (
@@ -141,11 +146,9 @@ export const MediaAttachment = ({
               variant="secondary" 
               size="sm" 
               className="h-8 w-8 p-0" 
-              asChild
+              onClick={handleExternalLink}
             >
-              <a href={attachment.url} target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="h-4 w-4" />
-              </a>
+              <ExternalLink className="h-4 w-4" />
             </Button>
           </div>
         </DialogContent>
